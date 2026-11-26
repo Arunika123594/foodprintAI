@@ -1,0 +1,184 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build GoodTable",
+			"type": "shell",
+			"command": "node --check server/index.js; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; node --check server/pool.js; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; python -m py_compile services/forecast/main.py; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }; npm run build",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run GoodTable",
+			"type": "shell",
+			"command": "docker compose up --build",
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check GoodTable Services",
+			"type": "shell",
+			"command": "node --version; python --version; Get-Command psql,postgres,pg_ctl,docker -ErrorAction SilentlyContinue | Select-Object Name,Source; Get-Service -Name '*postgres*' -ErrorAction SilentlyContinue | Select-Object Name,Status; Test-NetConnection -ComputerName localhost -Port 5432 -InformationLevel Quiet",
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Run GoodTable app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"dev"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run GoodTable forecast",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"uvicorn",
+				"main:app",
+				"--host",
+				"0.0.0.0",
+				"--port",
+				"8000"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run GoodTable web",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"node_modules/vite/bin/vite.js",
+				"--host",
+				"0.0.0.0"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run GoodTable API",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"server/index.js"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Start GoodTable Docker services",
+			"type": "shell",
+			"command": "docker",
+			"args": [
+				"compose",
+				"up",
+				"--build",
+				"-d"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Run GoodTable forecast service",
+			"type": "shell",
+			"command": "python",
+			"args": [
+				"-m",
+				"uvicorn",
+				"main:app",
+				"--app-dir",
+				"D:\\FootPrint AI\\services\\forecast",
+				"--host",
+				"0.0.0.0",
+				"--port",
+				"8000"
+			],
+			"isBackground": true,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Find GitHub remote",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"-C",
+				"D:\\FootPrint AI",
+				"remote",
+				"-v"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Initialize and push repository",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"init",
+				"D:\\FootPrint AI"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Add GitHub remote",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"-C",
+				"D:\\FootPrint AI",
+				"remote",
+				"add",
+				"origin",
+				"https://github.com/Arunika123594/footprintAI.git"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Check repository status",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"-C",
+				"D:\\FootPrint AI",
+				"status",
+				"--short"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		},
+		{
+			"label": "Commit application",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"-C",
+				"D:\\FootPrint AI",
+				"add",
+				"."
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
+		}
+	]
+}

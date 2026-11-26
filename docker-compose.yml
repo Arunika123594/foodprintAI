@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: goodtable
+      POSTGRES_PASSWORD: goodtable
+      POSTGRES_DB: goodtable
+    ports:
+      - "5432:5432"
+    volumes:
+      - goodtable-data:/var/lib/postgresql/data
+      - ./server/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./server/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U goodtable -d goodtable"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  forecast:
+    build: ./services/forecast
+    ports:
+      - "8000:8000"
+
+  api:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgres://goodtable:goodtable@db:5432/goodtable
+      FORECAST_URL: http://forecast:8000
+    ports:
+      - "4000:4000"
+    depends_on:
+      db:
+        condition: service_healthy
+      forecast:
+        condition: service_started
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      VITE_API_PROXY_TARGET: http://api:4000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+volumes:
+  goodtable-data:
