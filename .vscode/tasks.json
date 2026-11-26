@@ -179,6 +179,20 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "Resolve merge and add files",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"-C",
+				"D:\\FootPrint AI",
+				"add",
+				"-A"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
 		}
 	]
 }
